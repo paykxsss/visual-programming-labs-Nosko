@@ -1,2 +1,1 @@
-# visual-programming-labs-Nosko
-Лабораторные работы
+# Лабораторные работы
