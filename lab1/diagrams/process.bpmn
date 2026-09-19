@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  id="Definitions_1"
+                  targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:process id="Process_FoodDelivery" isExecutable="false">
+
+    <!-- ===== СОБЫТИЯ ===== -->
+    <bpmn:startEvent id="StartEvent_1" name="Клиент открыл приложение">
+      <bpmn:outgoing>F1</bpmn:outgoing>
+    </bpmn:startEvent>
+
+    <bpmn:endEvent id="End_1" name="Заказ доставлен">
+      <bpmn:incoming>F16</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <bpmn:endEvent id="End_2" name="Заказ отменён">
+      <bpmn:incoming>F10</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <!-- ===== ЗАДАЧИ ===== -->
+    <bpmn:userTask id="Task_1" name="Выбрать блюда из меню">
+      <bpmn:incoming>F1</bpmn:incoming>
+      <bpmn:outgoing>F2</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:serviceTask id="Task_2" name="Сформировать корзину">
+      <bpmn:incoming>F2</bpmn:incoming>
+      <bpmn:outgoing>F3</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <bpmn:userTask id="Task_3" name="Подтвердить и оплатить">
+      <bpmn:incoming>F3</bpmn:incoming>
+      <bpmn:incoming>F7</bpmn:incoming>
+      <bpmn:outgoing>F4</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:serviceTask id="Task_4" name="Обработать платёж">
+      <bpmn:incoming>F4</bpmn:incoming>
+      <bpmn:outgoing>F5</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <bpmn:userTask id="Task_5" name="Принять заказ в ресторане">
+      <bpmn:incoming>F6</bpmn:incoming>
+      <bpmn:outgoing>F8</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:userTask id="Task_6" name="Приготовить блюда (Повар)">
+      <bpmn:incoming>F11</bpmn:incoming>
+      <bpmn:outgoing>F13</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <bpmn:serviceTask id="Task_7" name="Назначить курьера (Система)">
+      <bpmn:incoming>F12</bpmn:incoming>
+      <bpmn:outgoing>F14</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <bpmn:userTask id="Task_8" name="Доставить заказ клиенту">
+      <bpmn:incoming>F15</bpmn:incoming>
+      <bpmn:outgoing>F16</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <!-- ===== ШЛЮЗЫ ===== -->
+    <bpmn:exclusiveGateway id="XOR_1" name="Оплата успешна?">
+      <bpmn:incoming>F5</bpmn:incoming>
+      <bpmn:outgoing>F6</bpmn:outgoing>
+      <bpmn:outgoing>F7</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <bpmn:exclusiveGateway id="XOR_2" name="Ресторан доступен?">
+      <bpmn:incoming>F8</bpmn:incoming>
+      <bpmn:outgoing>F9</bpmn:outgoing>
+      <bpmn:outgoing>F10</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <bpmn:parallelGateway id="AND_Split" name="Параллельно">
+      <bpmn:incoming>F9</bpmn:incoming>
+      <bpmn:outgoing>F11</bpmn:outgoing>
+      <bpmn:outgoing>F12</bpmn:outgoing>
+    </bpmn:parallelGateway>
+
+    <bpmn:parallelGateway id="AND_Join" name="Синхронизация">
+      <bpmn:incoming>F13</bpmn:incoming>
+      <bpmn:incoming>F14</bpmn:incoming>
+      <bpmn:outgoing>F15</bpmn:outgoing>
+    </bpmn:parallelGateway>
+
+    <!-- ===== ПОТОКИ ===== -->
+    <bpmn:sequenceFlow id="F1" sourceRef="StartEvent_1" targetRef="Task_1" />
+    <bpmn:sequenceFlow id="F2" sourceRef="Task_1" targetRef="Task_2" />
+    <bpmn:sequenceFlow id="F3" sourceRef="Task_2" targetRef="Task_3" />
+    <bpmn:sequenceFlow id="F4" sourceRef="Task_3" targetRef="Task_4" />
+    <bpmn:sequenceFlow id="F5" sourceRef="Task_4" targetRef="XOR_1" />
+    <bpmn:sequenceFlow id="F6" name="Да" sourceRef="XOR_1" targetRef="Task_5" />
+    <bpmn:sequenceFlow id="F7" name="Нет" sourceRef="XOR_1" targetRef="Task_3" />
+    <bpmn:sequenceFlow id="F8" sourceRef="Task_5" targetRef="XOR_2" />
+    <bpmn:sequenceFlow id="F9" name="Да" sourceRef="XOR_2" targetRef="AND_Split" />
+    <bpmn:sequenceFlow id="F10" name="Нет" sourceRef="XOR_2" targetRef="End_2" />
+    <bpmn:sequenceFlow id="F11" sourceRef="AND_Split" targetRef="Task_6" />
+    <bpmn:sequenceFlow id="F12" sourceRef="AND_Split" targetRef="Task_7" />
+    <bpmn:sequenceFlow id="F13" sourceRef="Task_6" targetRef="AND_Join" />
+    <bpmn:sequenceFlow id="F14" sourceRef="Task_7" targetRef="AND_Join" />
+    <bpmn:sequenceFlow id="F15" sourceRef="AND_Join" targetRef="Task_8" />
+    <bpmn:sequenceFlow id="F16" sourceRef="Task_8" targetRef="End_1" />
+
+  </bpmn:process>
+
+  <!-- ===== ГРАФИЧЕСКАЯ ЧАСТЬ (координаты) ===== -->
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_FoodDelivery">
+
+      <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="150" y="200" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="126" y="243" width="84" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Task_1_di" bpmnElement="Task_1">
+        <dc:Bounds x="240" y="178" width="100" height="80" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Task_2_di" bpmnElement="Task_2">
+        <dc:Bounds x="390" y="178" width="100" height="80" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Task_3_di" bpmnElement="Task_3">
+        <dc:Bounds x="540" y="178" width="100" height="80" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Task_4_di" bpmnElement="Task_4">
+        <dc:Bounds x="690" y="178" width="100" height="80" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="XOR_1_di" bpmnElement="XOR_1">
+        <dc:Bounds x="840" y="193" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="828" y="163" width="76" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Task_5_di" bpmnElement="Task_5">
+        <dc:Bounds x="940" y="178" width="100" height="80" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="XOR_2_di" bpmnElement="XOR_2">
+        <dc:Bounds x="1090" y="193" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1078" y="163" width="76" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="AND_Split_di" bpmnElement="AND_Split">
+        <dc:Bounds x="1190" y="193" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1181" y="163" width="70" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Task_6_di" bpmnElement="Task_6">
+        <dc:Bounds x="1290" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Task_7_di" bpmnElement="Task_7">
+        <dc:Bounds x="1290" y="280" width="100" height="80" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="AND_Join_di" bpmnElement="AND_Join">
+        <dc:Bounds x="1440" y="195" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1432" y="165" width="70" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Task_8_di" bpmnElement="Task_8">
+        <dc:Bounds x="1540" y="180" width="100" height="80" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="End_1_di" bpmnElement="End_1">
+        <dc:Bounds x="1700" y="202" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1682" y="245" width="72" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="End_2_di" bpmnElement="End_2">
+        <dc:Bounds x="1097" y="380" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1078" y="423" width="74" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <!-- ===== РЁБРА ===== -->
+      <bpmndi:BPMNEdge id="F1_di" bpmnElement="F1">
+        <di:waypoint x="186" y="218" />
+        <di:waypoint x="240" y="218" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F2_di" bpmnElement="F2">
+        <di:waypoint x="340" y="218" />
+        <di:waypoint x="390" y="218" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F3_di" bpmnElement="F3">
+        <di:waypoint x="490" y="218" />
+        <di:waypoint x="540" y="218" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F4_di" bpmnElement="F4">
+        <di:waypoint x="640" y="218" />
+        <di:waypoint x="690" y="218" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F5_di" bpmnElement="F5">
+        <di:waypoint x="790" y="218" />
+        <di:waypoint x="840" y="218" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F6_di" bpmnElement="F6">
+        <di:waypoint x="890" y="218" />
+        <di:waypoint x="940" y="218" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F7_di" bpmnElement="F7">
+        <di:waypoint x="865" y="243" />
+        <di:waypoint x="865" y="320" />
+        <di:waypoint x="590" y="320" />
+        <di:waypoint x="590" y="258" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F8_di" bpmnElement="F8">
+        <di:waypoint x="1040" y="218" />
+        <di:waypoint x="1090" y="218" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F9_di" bpmnElement="F9">
+        <di:waypoint x="1140" y="218" />
+        <di:waypoint x="1190" y="218" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F10_di" bpmnElement="F10">
+        <di:waypoint x="1115" y="243" />
+        <di:waypoint x="1115" y="380" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F11_di" bpmnElement="F11">
+        <di:waypoint x="1215" y="193" />
+        <di:waypoint x="1215" y="120" />
+        <di:waypoint x="1290" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F12_di" bpmnElement="F12">
+        <di:waypoint x="1215" y="243" />
+        <di:waypoint x="1215" y="320" />
+        <di:waypoint x="1290" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F13_di" bpmnElement="F13">
+        <di:waypoint x="1390" y="120" />
+        <di:waypoint x="1465" y="120" />
+        <di:waypoint x="1465" y="195" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F14_di" bpmnElement="F14">
+        <di:waypoint x="1390" y="320" />
+        <di:waypoint x="1465" y="320" />
+        <di:waypoint x="1465" y="245" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F15_di" bpmnElement="F15">
+        <di:waypoint x="1490" y="220" />
+        <di:waypoint x="1540" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F16_di" bpmnElement="F16">
+        <di:waypoint x="1640" y="220" />
+        <di:waypoint x="1700" y="220" />
+      </bpmndi:BPMNEdge>
+
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

@@ -1,0 +1,189 @@
+<mxfile host="app.diagrams.net" modified="2026-09-19T00:00:00.000Z"
+        agent="Mozilla/5.0" version="24.0.0" type="device">
+  <diagram id="activity-payment" name="Оплата заказа (UML Activity)">
+    <mxGraphModel dx="1000" dy="800" grid="1" gridSize="10" guides="1"
+                  tooltips="1" connect="1" arrows="1" fold="1" page="1"
+                  pageScale="1" pageWidth="850" pageHeight="1100"
+                  math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ===== НАЧАЛЬНЫЙ УЗЕЛ ===== -->
+        <mxCell id="start" value=""
+                style="ellipse;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=#000000;"
+                vertex="1" parent="1">
+          <mxGeometry x="380" y="40" width="30" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ===== ДЕЙСТВИЕ 1 ===== -->
+        <mxCell id="action1" value="Клиент нажимает&#10;«Оплатить заказ»"
+                style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;fillColor=#dae8fc;strokeColor=#6c8ebf;"
+                vertex="1" parent="1">
+          <mxGeometry x="320" y="110" width="150" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ===== ДЕЙСТВИЕ 2 ===== -->
+        <mxCell id="action2" value="Система отправляет&#10;запрос в платёжный шлюз"
+                style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;fillColor=#dae8fc;strokeColor=#6c8ebf;"
+                vertex="1" parent="1">
+          <mxGeometry x="320" y="210" width="150" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ===== ДЕЙСТВИЕ 3 ===== -->
+        <mxCell id="action3" value="Платёжный шлюз&#10;обрабатывает транзакцию"
+                style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;fillColor=#dae8fc;strokeColor=#6c8ebf;"
+                vertex="1" parent="1">
+          <mxGeometry x="320" y="310" width="150" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ===== РЕШЕНИЕ 1 (ветвление) ===== -->
+        <mxCell id="decision1" value="Оплата&#10;прошла?"
+                style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;"
+                vertex="1" parent="1">
+          <mxGeometry x="355" y="410" width="80" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- ===== ДЕЙСТВИЕ 4 (успех) ===== -->
+        <mxCell id="action4" value="Заказ отправлен&#10;в ресторан"
+                style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;fillColor=#d5e8d4;strokeColor=#82b366;"
+                vertex="1" parent="1">
+          <mxGeometry x="560" y="420" width="150" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ===== КОНЕЧНЫЙ УЗЕЛ (успех) ===== -->
+        <mxCell id="final1" value=""
+                style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=2;"
+                vertex="1" parent="1">
+          <mxGeometry x="620" y="540" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="final1_inner" value=""
+                style="ellipse;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=none;"
+                vertex="1" parent="1">
+          <mxGeometry x="628" y="548" width="14" height="14" as="geometry" />
+        </mxCell>
+
+        <!-- ===== ДЕЙСТВИЕ 5 (ошибка) ===== -->
+        <mxCell id="action5" value="Показать сообщение&#10;об ошибке"
+                style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;fillColor=#f8cecc;strokeColor=#b85450;"
+                vertex="1" parent="1">
+          <mxGeometry x="80" y="420" width="150" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ===== ДЕЙСТВИЕ 6 (счётчик) ===== -->
+        <mxCell id="action6" value="Увеличить счётчик&#10;попыток"
+                style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;fillColor=#f8cecc;strokeColor=#b85450;"
+                vertex="1" parent="1">
+          <mxGeometry x="80" y="520" width="150" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ===== РЕШЕНИЕ 2 (цикл) ===== -->
+        <mxCell id="decision2" value="Попыток&#10;&lt; 3?"
+                style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;"
+                vertex="1" parent="1">
+          <mxGeometry x="115" y="620" width="80" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- ===== ДЕЙСТВИЕ 7 (отмена) ===== -->
+        <mxCell id="action7" value="Отменить заказ"
+                style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;fillColor=#f8cecc;strokeColor=#b85450;"
+                vertex="1" parent="1">
+          <mxGeometry x="80" y="760" width="150" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ===== КОНЕЧНЫЙ УЗЕЛ (отмена) ===== -->
+        <mxCell id="final2" value=""
+                style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=2;"
+                vertex="1" parent="1">
+          <mxGeometry x="140" y="860" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="final2_inner" value=""
+                style="ellipse;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=none;"
+                vertex="1" parent="1">
+          <mxGeometry x="148" y="868" width="14" height="14" as="geometry" />
+        </mxCell>
+
+        <!-- ===== УЗЕЛ СЛИЯНИЯ ===== -->
+        <mxCell id="merge1" value=""
+                style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;"
+                vertex="1" parent="1">
+          <mxGeometry x="390" y="530" width="40" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ===== ПОТОКИ УПРАВЛЕНИЯ ===== -->
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;html=1;"
+                edge="1" parent="1" source="start" target="action1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;html=1;"
+                edge="1" parent="1" source="action1" target="action2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;html=1;"
+                edge="1" parent="1" source="action2" target="action3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;html=1;"
+                edge="1" parent="1" source="action3" target="decision1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Да → успех -->
+        <mxCell id="e5" value="Да"
+                style="edgeStyle=orthogonalEdgeStyle;html=1;"
+                edge="1" parent="1" source="decision1" target="action4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;html=1;"
+                edge="1" parent="1" source="action4" target="final1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Нет → ошибка -->
+        <mxCell id="e7" value="Нет"
+                style="edgeStyle=orthogonalEdgeStyle;html=1;"
+                edge="1" parent="1" source="decision1" target="action5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;html=1;"
+                edge="1" parent="1" source="action5" target="action6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;html=1;"
+                edge="1" parent="1" source="action6" target="decision2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Нет (попытки кончились) → отмена -->
+        <mxCell id="e10" value="Нет"
+                style="edgeStyle=orthogonalEdgeStyle;html=1;"
+                edge="1" parent="1" source="decision2" target="action7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" style="edgeStyle=orthogonalEdgeStyle;html=1;"
+                edge="1" parent="1" source="action7" target="final2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Да (цикл) → возврат к показу ошибки -->
+        <mxCell id="e12" value="Да (цикл)"
+                style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;"
+                edge="1" parent="1" source="decision2" target="action5">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="20" y="660" />
+              <mxPoint x="20" y="450" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Слияние: поток «Да» и цикл -->
+        <mxCell id="e13" style="edgeStyle=orthogonalEdgeStyle;html=1;"
+                edge="1" parent="1" source="action3" target="merge1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
