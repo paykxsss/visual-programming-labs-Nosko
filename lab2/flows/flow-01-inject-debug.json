@@ -1,0 +1,48 @@
+[
+    {
+        "id": "3aaa487d623edcff",
+        "type": "inject",
+        "z": "72a4504fd631ff02",
+        "name": "lab2/basic",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "5",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "lab2/nosko/basic",
+        "payload": "Nosko",
+        "payloadType": "str",
+        "x": 150,
+        "y": 160,
+        "wires": [
+            [
+                "3d8723fb8de47b86"
+            ]
+        ]
+    },
+    {
+        "id": "3d8723fb8de47b86",
+        "type": "debug",
+        "z": "72a4504fd631ff02",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 400,
+        "y": 160,
+        "wires": []
+    }
+]
