@@ -1,0 +1,68 @@
+[
+    {
+        "id": "b705af57556b3527",
+        "type": "inject",
+        "z": "3f8fc25f17e2b779",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "42",
+        "payloadType": "num",
+        "x": 110,
+        "y": 140,
+        "wires": [
+            [
+                "f2e2293b7b2f49af"
+            ]
+        ]
+    },
+    {
+        "id": "f2e2293b7b2f49af",
+        "type": "function",
+        "z": "3f8fc25f17e2b779",
+        "name": "Function: calc sum",
+        "func": "let result = {};\nconst nums = [1, 2, 3, 4, 5];\nlet sum = 0;\nfor (let i = 0; i < nums.length; i++) {\n    sum += nums[i];\n}\nif (sum > 10) {\n    result.status = \"большая сумма\";\n} else {\n    result.status = \"маленькая сумма\";\n}\nresult.total = sum;\nresult.input = msg.payload;\nmsg.payload = result;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 140,
+        "wires": [
+            [
+                "69465c988b41a10e"
+            ]
+        ]
+    },
+    {
+        "id": "69465c988b41a10e",
+        "type": "debug",
+        "z": "3f8fc25f17e2b779",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 520,
+        "y": 140,
+        "wires": []
+    }
+]
