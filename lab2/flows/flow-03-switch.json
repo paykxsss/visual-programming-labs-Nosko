@@ -1,0 +1,124 @@
+[
+    {
+        "id": "a7dce28e5d724b8d",
+        "type": "tab",
+        "label": "Поток 4",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "8c3d4e12725b8db7",
+        "type": "function",
+        "z": "a7dce28e5d724b8d",
+        "name": "function 1",
+        "func": "let result = {};\nconst nums = [1, 2, 3, 4, 5];\nlet sum = 0;\nfor (let i = 0; i < nums.length; i++) {\n    sum += nums[i];\n}\nif (sum > 10) {\n    result.status = \"большая сумма\";\n} else {\n    result.status = \"маленькая сумма\";\n}\nresult.total = sum;\nresult.input = msg.payload;\nmsg.payload = result;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 140,
+        "wires": [
+            [
+                "f1bd5303f977542b"
+            ]
+        ]
+    },
+    {
+        "id": "7e334b6f0d0c4c5e",
+        "type": "inject",
+        "z": "a7dce28e5d724b8d",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "большая сумма",
+        "payloadType": "str",
+        "x": 160,
+        "y": 140,
+        "wires": [
+            [
+                "8c3d4e12725b8db7"
+            ]
+        ]
+    },
+    {
+        "id": "f1bd5303f977542b",
+        "type": "switch",
+        "z": "a7dce28e5d724b8d",
+        "name": "",
+        "property": "payload.status",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "большая сумма",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 2,
+        "x": 570,
+        "y": 140,
+        "wires": [
+            [
+                "7881c030c12ea1a2"
+            ],
+            [
+                "d95e7b2ec2ec83c5"
+            ]
+        ]
+    },
+    {
+        "id": "7881c030c12ea1a2",
+        "type": "debug",
+        "z": "a7dce28e5d724b8d",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 780,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "d95e7b2ec2ec83c5",
+        "type": "debug",
+        "z": "a7dce28e5d724b8d",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 760,
+        "y": 180,
+        "wires": []
+    }
+]
