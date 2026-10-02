@@ -1,0 +1,159 @@
+[
+    {
+        "id": "b459059045d71534",
+        "type": "tab",
+        "label": "Поток 6",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "0ffc57ef96a03b48",
+        "type": "ui_gauge",
+        "z": "b459059045d71534",
+        "name": "",
+        "group": "cb7a1ae7b58a2da9",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Температура",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": "15",
+        "max": "30",
+        "colors": [
+            "#1bc5f5",
+            "#4af202",
+            "#ea8b4d"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 680,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "73bb9378adafab68",
+        "type": "inject",
+        "z": "b459059045d71534",
+        "name": "Каждые 3 секунды",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "3",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 180,
+        "y": 240,
+        "wires": [
+            [
+                "90861203dfe886e8"
+            ]
+        ]
+    },
+    {
+        "id": "90861203dfe886e8",
+        "type": "function",
+        "z": "b459059045d71534",
+        "name": "Имитация датчика",
+        "func": "// Имитация датчика температуры\n// Базовая температура + небольшой шум + плавное изменение\nconst base = 22;              // средняя температура\nconst noise = (Math.random() - 0.5) * 2; // шум ±1 градус\n\nmsg.payload = +(base + noise).toFixed(2);\nmsg.topic = \"temperature\";\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 240,
+        "wires": [
+            [
+                "0ffc57ef96a03b48",
+                "c5cc66f957fd8323"
+            ]
+        ]
+    },
+    {
+        "id": "c5cc66f957fd8323",
+        "type": "ui_chart",
+        "z": "b459059045d71534",
+        "name": "",
+        "group": "cb7a1ae7b58a2da9",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "История температуры",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "15",
+        "ymax": "30",
+        "removeOlder": "5",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 730,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "cb7a1ae7b58a2da9",
+        "type": "ui_group",
+        "name": "Датчик температуры",
+        "tab": "242cf9a31e28ca4b",
+        "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "242cf9a31e28ca4b",
+        "type": "ui_tab",
+        "name": "Лаба 2",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "0a02f61e34238242",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-dashboard": "3.6.6"
+        }
+    }
+]
