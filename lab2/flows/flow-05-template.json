@@ -1,0 +1,75 @@
+[
+    {
+        "id": "88a9734b3e63fa60",
+        "type": "tab",
+        "label": "Поток 2",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "d18d0c8a2d6023ad",
+        "type": "inject",
+        "z": "88a9734b3e63fa60",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{   \"customer\": \"Иван\",   \"pizza\": \"Пепперони\",   \"size\": 35,   \"extras\": [\"сыр \", \"грибы \", \"острый перец\"],   \"paid\": true }",
+        "payloadType": "json",
+        "x": 100,
+        "y": 140,
+        "wires": [
+            [
+                "20b0bf17efa7bbd0"
+            ]
+        ]
+    },
+    {
+        "id": "d8d94a6f72d1f4bc",
+        "type": "debug",
+        "z": "88a9734b3e63fa60",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 620,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "20b0bf17efa7bbd0",
+        "type": "template",
+        "z": "88a9734b3e63fa60",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "==============================\n        ЧЕК ЗАКАЗА\n==============================\nКлиент:      {{payload.customer}}\nПицца:       {{payload.pizza}}\nРазмер:      {{payload.size}} см\nДобавки:     {{#payload.extras}}{{.}}{{/payload.extras}}\nОплачено:    {{#payload.paid}}ДА{{/payload.paid}}{{^payload.paid}}НЕТ{{/payload.paid}}\n==============================",
+        "output": "str",
+        "x": 380,
+        "y": 140,
+        "wires": [
+            [
+                "d8d94a6f72d1f4bc"
+            ]
+        ]
+    }
+]
