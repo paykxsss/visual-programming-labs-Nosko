@@ -1,0 +1,156 @@
+[
+    {
+        "id": "b459059045d71534",
+        "type": "tab",
+        "label": "Поток 6",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "6408e24112ffe6c9",
+        "type": "http in",
+        "z": "b459059045d71534",
+        "name": "GET /api/text",
+        "url": "/api/text",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 220,
+        "wires": [
+            [
+                "a78a66b757433a92"
+            ]
+        ]
+    },
+    {
+        "id": "3fe4acbe9d21f16a",
+        "type": "http response",
+        "z": "b459059045d71534",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 530,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "a78a66b757433a92",
+        "type": "template",
+        "z": "b459059045d71534",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "plain",
+        "template": "Привет! Это простой текст от Node-RED.",
+        "output": "str",
+        "x": 340,
+        "y": 220,
+        "wires": [
+            [
+                "3fe4acbe9d21f16a"
+            ]
+        ]
+    },
+    {
+        "id": "ce8c9f6fcc2fce26",
+        "type": "function",
+        "z": "b459059045d71534",
+        "name": "function 3",
+        "func": "msg.payload = {\n  service: \"Node-RED lab2\",\n  version: \"1.0.0\"\n};\nmsg.headers = { \"Content-Type\": \"application/json; charset=utf-8\" };\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 320,
+        "wires": [
+            [
+                "856e5c32597fc5e5"
+            ]
+        ]
+    },
+    {
+        "id": "2bcb95a3f85a9c64",
+        "type": "http in",
+        "z": "b459059045d71534",
+        "name": "GET /api/info",
+        "url": "/api/info",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 320,
+        "wires": [
+            [
+                "ce8c9f6fcc2fce26"
+            ]
+        ]
+    },
+    {
+        "id": "856e5c32597fc5e5",
+        "type": "http response",
+        "z": "b459059045d71534",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 530,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "708bd38dda1ab88d",
+        "type": "http in",
+        "z": "b459059045d71534",
+        "name": "GET /api/items/:id",
+        "url": "/api/items/:id",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 190,
+        "y": 420,
+        "wires": [
+            [
+                "066ce30140e7d1c6"
+            ]
+        ]
+    },
+    {
+        "id": "63b0e3466eb69e00",
+        "type": "http response",
+        "z": "b459059045d71534",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 590,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "066ce30140e7d1c6",
+        "type": "function",
+        "z": "b459059045d71534",
+        "name": "function 4",
+        "func": "// Забираем path-параметр id\nconst idRaw = msg.req.params.id;\nconst id = parseInt(idRaw, 10);\n\n// Забираем query-параметр limit (по умолчанию 10)\nconst limitRaw = msg.req.query.limit || \"10\";\nconst limit = parseInt(limitRaw, 10);\n\n// Проверка id: должен быть числом > 0\nif (isNaN(id) || id <= 0) {\n    msg.statusCode = 400;\n    msg.headers = { \"Content-Type\": \"application/json; charset=utf-8\" };\n    msg.payload = {\n        error: \"Invalid id\",\n        message: \"id должен быть положительным числом\",\n        received: idRaw\n    };\n    return msg;\n}\n\n// Проверка limit: если задан, должен быть числом от 1 до 50\nif (isNaN(limit) || limit < 1 || limit > 50) {\n    msg.statusCode = 400;\n    msg.headers = { \"Content-Type\": \"application/json; charset=utf-8\" };\n    msg.payload = {\n        error: \"Invalid limit\",\n        message: \"limit должен быть числом от 1 до 50\",\n        received: limitRaw\n    };\n    return msg;\n}\n\n// Товара с таким id нет (у нас всего 100)\nif (id > 100) {\n    msg.statusCode = 404;\n    msg.headers = { \"Content-Type\": \"application/json; charset=utf-8\" };\n    msg.payload = {\n        error: \"Not found\",\n        message: `Товар с id=${id} не найден`,\n        maxId: 100\n    };\n    return msg;\n}\n\n// Успех: отдаём товар и список похожих\nconst items = [];\nfor (let i = 0; i < limit; i++) {\n    items.push({\n        id: id * 100 + i,\n        name: `Товар #${id}-${i}`,\n        price: +(Math.random() * 1000).toFixed(2)\n    });\n}\n\nmsg.statusCode = 200;\nmsg.headers = { \"Content-Type\": \"application/json; charset=utf-8\" };\nmsg.payload = {\n    requestedId: id,\n    limit: limit,\n    count: items.length,\n    items: items\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 420,
+        "wires": [
+            [
+                "63b0e3466eb69e00"
+            ]
+        ]
+    }
+]
