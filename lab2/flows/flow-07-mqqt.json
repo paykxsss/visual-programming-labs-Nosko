@@ -1,0 +1,146 @@
+[
+    {
+        "id": "5ae328498a05058a",
+        "type": "tab",
+        "label": "Поток 5",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "0d6a403751526fbd",
+        "type": "inject",
+        "z": "5ae328498a05058a",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "5",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 190,
+        "y": 120,
+        "wires": [
+            [
+                "173ca6f124ec0c22"
+            ]
+        ]
+    },
+    {
+        "id": "173ca6f124ec0c22",
+        "type": "function",
+        "z": "5ae328498a05058a",
+        "name": "function 2",
+        "func": "msg.payload = Math.floor(Math.random() * 100);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 440,
+        "y": 120,
+        "wires": [
+            [
+                "fca54e6a9dd6bd61"
+            ]
+        ]
+    },
+    {
+        "id": "4632baffedb5122d",
+        "type": "mqtt in",
+        "z": "5ae328498a05058a",
+        "name": "",
+        "topic": "student/nosko/lab2/sensor-2026",
+        "qos": "1",
+        "datatype": "auto-detect",
+        "broker": "7861af55e7264e17",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 190,
+        "y": 220,
+        "wires": [
+            [
+                "d5502d51b8d74e97"
+            ]
+        ]
+    },
+    {
+        "id": "fca54e6a9dd6bd61",
+        "type": "mqtt out",
+        "z": "5ae328498a05058a",
+        "name": "",
+        "topic": "student/nosko/lab2/sensor-2026",
+        "qos": "0",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "7861af55e7264e17",
+        "x": 710,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "d5502d51b8d74e97",
+        "type": "debug",
+        "z": "5ae328498a05058a",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 520,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "7861af55e7264e17",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "broker.hivemq.com",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    }
+]
