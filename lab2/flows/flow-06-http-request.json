@@ -1,0 +1,79 @@
+[
+    {
+        "id": "fc2ae756edbc3442",
+        "type": "tab",
+        "label": "Поток 3",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "a3f5bc770630e3e4",
+        "type": "inject",
+        "z": "fc2ae756edbc3442",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "x": 160,
+        "y": 100,
+        "wires": [
+            [
+                "a313afc79034d940"
+            ]
+        ]
+    },
+    {
+        "id": "a313afc79034d940",
+        "type": "http request",
+        "z": "fc2ae756edbc3442",
+        "name": "",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "https://official-joke-api.appspot.com/random_joke",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 370,
+        "y": 100,
+        "wires": [
+            [
+                "2e4740d0a9ba0a3e"
+            ]
+        ]
+    },
+    {
+        "id": "2e4740d0a9ba0a3e",
+        "type": "debug",
+        "z": "fc2ae756edbc3442",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 580,
+        "y": 100,
+        "wires": []
+    }
+]
