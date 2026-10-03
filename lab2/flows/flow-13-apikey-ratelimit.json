@@ -1,0 +1,57 @@
+[
+    {
+        "id": "f13-http-in-text",
+        "type": "http in",
+        "name": "GET /api/text (protected)",
+        "url": "/api/text",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 100,
+        "wires": [["f13-auth-text"]]
+    },
+    {
+        "id": "f13-auth-text",
+        "type": "function",
+        "name": "Auth + Rate limit",
+        "func": "// ===== Конфигурация =====\nconst VALID_KEYS = [\"secret-key-1\", \"secret-key-2\"];\nconst LIMIT_PER_MIN = 3;\nconst WINDOW_MS = 60 * 1000;\n\n// ===== Читаем ключ из заголовка =====\nconst key = msg.req.headers[\"x-api-key\"];\n\nif (!key) {\n    msg.statusCode = 401;\n    msg.headers = { \"Content-Type\": \"application/json; charset=utf-8\" };\n    msg.payload = {\n        error: \"Unauthorized\",\n        message: \"Заголовок X-API-Key отсутствует\"\n    };\n    return [null, msg];\n}\n\nif (!VALID_KEYS.includes(key)) {\n    msg.statusCode = 401;\n    msg.headers = { \"Content-Type\": \"application/json; charset=utf-8\" };\n    msg.payload = {\n        error: \"Unauthorized\",\n        message: \"Неверный API-ключ\"\n    };\n    return [null, msg];\n}\n\n// ===== Rate limit =====\nconst now = Date.now();\nconst storeKey = `rl_${key}`;\nlet state = flow.get(storeKey) || { count: 0, windowStart: now };\n\n// Окно истекло — сбрасываем\nif (now - state.windowStart > WINDOW_MS) {\n    state = { count: 0, windowStart: now };\n}\n\nstate.count += 1;\nflow.set(storeKey, state);\n\nif (state.count > LIMIT_PER_MIN) {\n    const retryAfter = Math.ceil((state.windowStart + WINDOW_MS - now) / 1000);\n    msg.statusCode = 429;\n    msg.headers = {\n        \"Content-Type\": \"application/json; charset=utf-8\",\n        \"Retry-After\": String(retryAfter),\n        \"X-RateLimit-Limit\": String(LIMIT_PER_MIN),\n        \"X-RateLimit-Remaining\": \"0\"\n    };\n    msg.payload = {\n        error: \"Too Many Requests\",\n        message: `Лимит ${LIMIT_PER_MIN} запросов в минуту превышен`,\n        retryAfter: retryAfter\n    };\n    return [null, msg];\n}\n\n// ===== Успех =====\nmsg.headers = {\n    \"Content-Type\": \"application/json; charset=utf-8\",\n    \"X-RateLimit-Limit\": String(LIMIT_PER_MIN),\n    \"X-RateLimit-Remaining\": String(LIMIT_PER_MIN - state.count),\n    \"X-API-Key-Used\": key\n};\nmsg.statusCode = 200;\nmsg.payload = {\n    message: \"Доступ разрешён\",\n    key: key,\n    used: state.count,\n    remaining: LIMIT_PER_MIN - state.count\n};\nreturn [msg, null];",
+        "outputs": 2,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 100,
+        "wires": [["f13-http-resp-ok"], ["f13-http-resp-err"]]
+    },
+    {
+        "id": "f13-http-resp-ok",
+        "type": "http response",
+        "name": "200 OK",
+        "statusCode": "",
+        "headers": {},
+        "x": 700,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "f13-http-resp-err",
+        "type": "http response",
+        "name": "401/429",
+        "statusCode": "",
+        "headers": {},
+        "x": 690,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "f13-comment",
+        "type": "comment",
+        "name": "Ачивка 9: API key (X-API-Key) + rate limit 3 req/min. Ключи: secret-key-1, secret-key-2",
+        "info": "Запрос:\ncurl -H \"X-API-Key: secret-key-1\" http://localhost:1880/api/text\n\nБез ключа → 401\nНеверный ключ → 401\nБольше 3 запросов в минуту → 429",
+        "x": 330,
+        "y": 40,
+        "wires": []
+    }
+]
