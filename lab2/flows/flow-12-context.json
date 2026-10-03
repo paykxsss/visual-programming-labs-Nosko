@@ -1,0 +1,132 @@
+[
+    {
+        "id": "16973a7b471de0c3",
+        "type": "tab",
+        "label": "Поток 7",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "f12-inject-counter",
+        "type": "inject",
+        "z": "16973a7b471de0c3",
+        "name": "Увеличить",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 280,
+        "wires": [
+            [
+                "f12-func-counter"
+            ]
+        ]
+    },
+    {
+        "id": "f12-func-counter",
+        "type": "function",
+        "z": "16973a7b471de0c3",
+        "name": "Счётчик",
+        "func": "let c = flow.get(\"counter\") || 0;\nc += 1;\nflow.set(\"counter\", c);\n\nmsg.payload = {\n    counter: c,\n    timestamp: new Date().toISOString()\n};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 280,
+        "wires": [
+            [
+                "f12-debug"
+            ]
+        ]
+    },
+    {
+        "id": "f12-debug",
+        "type": "debug",
+        "z": "16973a7b471de0c3",
+        "name": "Значение",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 600,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "f12-inject-reset",
+        "type": "inject",
+        "z": "16973a7b471de0c3",
+        "name": "Сброс",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 360,
+        "wires": [
+            [
+                "f12-func-reset"
+            ]
+        ]
+    },
+    {
+        "id": "f12-func-reset",
+        "type": "function",
+        "z": "16973a7b471de0c3",
+        "name": "Обнулить",
+        "func": "flow.set(\"counter\", 0);\nmsg.payload = \"Счётчик сброшен\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 360,
+        "wires": [
+            [
+                "f12-debug-reset"
+            ]
+        ]
+    },
+    {
+        "id": "f12-debug-reset",
+        "type": "debug",
+        "z": "16973a7b471de0c3",
+        "name": "Сброс",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 580,
+        "y": 360,
+        "wires": []
+    }
+]
