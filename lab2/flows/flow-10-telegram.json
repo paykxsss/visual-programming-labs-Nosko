@@ -1,0 +1,230 @@
+[
+    {
+        "id": "efaca0270eafe91e",
+        "type": "tab",
+        "label": "Поток 8",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "9c5e3eebc1fd7ffc",
+        "type": "telegram receiver",
+        "z": "efaca0270eafe91e",
+        "name": "Приём /start",
+        "bot": "f2bee29a84c5dd1c",
+        "saveDataDir": "",
+        "filterCommands": true,
+        "hasinput": false,
+        "inputs": 0,
+        "handleallupdates": false,
+        "handleprocessupdates": false,
+        "x": 250,
+        "y": 220,
+        "wires": [
+            [
+                "da823168e2a51fff"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "da823168e2a51fff",
+        "type": "function",
+        "z": "efaca0270eafe91e",
+        "name": "Приветствие",
+        "func": "msg.payload = {\n    chatId: msg.payload.chatId,\n    type: \"message\",\n    content: \"Привет! Я бот lab2. Доступные команды:\\n/start — это сообщение\\n/time — текущее время\\n\\nИли напиши что угодно — я повторю.\"\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 220,
+        "wires": [
+            [
+                "eea6ee3e9a94b688"
+            ]
+        ]
+    },
+    {
+        "id": "a107319743700250",
+        "type": "telegram command",
+        "z": "efaca0270eafe91e",
+        "name": "",
+        "command": "/start",
+        "description": "Начало работы",
+        "registercommand": false,
+        "language": "ru",
+        "scope": "default",
+        "bot": "f2bee29a84c5dd1c",
+        "strict": false,
+        "hasresponse": false,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 1,
+        "x": 250,
+        "y": 280,
+        "wires": [
+            [
+                "da823168e2a51fff"
+            ]
+        ]
+    },
+    {
+        "id": "a37d271d9e264d9e",
+        "type": "telegram receiver",
+        "z": "efaca0270eafe91e",
+        "name": "Приём /time",
+        "bot": "f2bee29a84c5dd1c",
+        "saveDataDir": "",
+        "filterCommands": true,
+        "hasinput": false,
+        "inputs": 0,
+        "handleallupdates": false,
+        "handleprocessupdates": false,
+        "x": 250,
+        "y": 380,
+        "wires": [
+            [
+                "8df7889305dbde1b"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "8df7889305dbde1b",
+        "type": "function",
+        "z": "efaca0270eafe91e",
+        "name": "Текущее время",
+        "func": "const now = new Date();\nconst formatted = now.toLocaleString(\"ru-RU\", {\n    timeZone: \"Europe/Moscow\",\n    year: \"numeric\",\n    month: \"2-digit\",\n    day: \"2-digit\",\n    hour: \"2-digit\",\n    minute: \"2-digit\",\n    second: \"2-digit\"\n});\n\nmsg.payload = {\n    chatId: msg.payload.chatId,\n    type: \"message\",\n    content: `Текущее время (МСК): ${formatted}`\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 380,
+        "wires": [
+            [
+                "eea6ee3e9a94b688"
+            ]
+        ]
+    },
+    {
+        "id": "aae616a572a3d57d",
+        "type": "telegram command",
+        "z": "efaca0270eafe91e",
+        "name": "",
+        "command": "/time",
+        "description": "Показать текущее время",
+        "registercommand": false,
+        "language": "ru",
+        "scope": "default",
+        "bot": "f2bee29a84c5dd1c",
+        "strict": false,
+        "hasresponse": false,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 1,
+        "x": 250,
+        "y": 440,
+        "wires": [
+            [
+                "8df7889305dbde1b"
+            ]
+        ]
+    },
+    {
+        "id": "c457ecc37f123e77",
+        "type": "telegram receiver",
+        "z": "efaca0270eafe91e",
+        "name": "Приём любого",
+        "bot": "f2bee29a84c5dd1c",
+        "saveDataDir": "",
+        "filterCommands": false,
+        "hasinput": false,
+        "inputs": 0,
+        "handleallupdates": false,
+        "handleprocessupdates": false,
+        "x": 250,
+        "y": 540,
+        "wires": [
+            [
+                "441228d23bc22ebf"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "441228d23bc22ebf",
+        "type": "function",
+        "z": "efaca0270eafe91e",
+        "name": "Echo",
+        "func": "const text = msg.payload.content || \"\";\n\nif (text.startsWith(\"/\")) {\n    return null;\n}\n\nmsg.payload = {\n    chatId: msg.payload.chatId,\n    type: \"message\",\n    content: `Ты написал: ${text}`\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 540,
+        "wires": [
+            [
+                "eea6ee3e9a94b688"
+            ]
+        ]
+    },
+    {
+        "id": "eea6ee3e9a94b688",
+        "type": "telegram sender",
+        "z": "efaca0270eafe91e",
+        "name": "Отправка",
+        "bot": "f2bee29a84c5dd1c",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 750,
+        "y": 380,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f2bee29a84c5dd1c",
+        "type": "telegram bot",
+        "botname": "lab2_bot",
+        "usernames": "",
+        "chatids": "",
+        "baseapiurl": "",
+        "testenvironment": false,
+        "updatemode": "polling",
+        "pollinterval": 300,
+        "usesocks": false,
+        "sockshost": "",
+        "socksprotocol": "socks5",
+        "socksport": 6667,
+        "socksusername": "anonymous",
+        "sockspassword": "",
+        "bothost": "",
+        "botpath": "",
+        "localbothost": "0.0.0.0",
+        "localbotport": 8443,
+        "publicbotport": 8443,
+        "privatekey": "",
+        "certificate": "",
+        "useselfsignedcertificate": false,
+        "sslterminated": false,
+        "verboselogging": false
+    },
+    {
+        "id": "348bbf5a3f3b33cc",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-telegrambot": "19.0.3"
+        }
+    }
+]
