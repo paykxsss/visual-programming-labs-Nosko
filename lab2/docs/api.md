@@ -226,3 +226,79 @@ curl -i "http://localhost:1880/api/items/999"
 2. Импортировать `flow-08-endpoints.json` (Menu → Import).
 3. Нажать **Deploy**.
 4. Проверить эндпоинты через браузер или curl.
+---
+
+## Защита API (Ачивка 9)
+
+Часть эндпоинтов защищена API-ключом и ограничением частоты.
+
+### Заголовок X-API-Key
+
+Все защищённые запросы должны содержать заголовок:
+
+```
+X-API-Key: secret-key-1
+```
+
+### Лимит
+
+- Максимум **3 запроса в минуту** на один ключ.
+- Окно — 60 секунд.
+- При превышении возвращается **429** с заголовком `Retry-After`.
+
+### Защищённый эндпоинт
+
+`GET /api/text`
+
+#### Без ключа → 401
+
+```bash
+curl -i http://localhost:1880/api/text
+```
+
+Ответ:
+
+```
+HTTP/1.1 401 Unauthorized
+{"error":"Unauthorized","message":"Заголовок X-API-Key отсутствует"}
+```
+
+#### Неверный ключ → 401
+
+```bash
+curl -i -H "X-API-Key: wrong" http://localhost:1880/api/text
+```
+
+Ответ:
+
+```
+HTTP/1.1 401 Unauthorized
+{"error":"Unauthorized","message":"Неверный API-ключ"}
+```
+
+#### Верный ключ → 200
+
+```bash
+curl -i -H "X-API-Key: secret-key-1" http://localhost:1880/api/text
+```
+
+Ответ:
+
+```
+HTTP/1.1 200 OK
+X-RateLimit-Limit: 3
+X-RateLimit-Remaining: 2
+{"message":"Доступ разрешён","key":"secret-key-1","used":1,"remaining":2}
+```
+
+#### Превышение лимита → 429
+
+Четвёртый запрос за минуту:
+
+```
+HTTP/1.1 429 Too Many Requests
+Retry-After: 47
+X-RateLimit-Limit: 3
+X-RateLimit-Remaining: 0
+{"error":"Too Many Requests","message":"Лимит 3 запросов в минуту превышен","retryAfter":47}
+```
