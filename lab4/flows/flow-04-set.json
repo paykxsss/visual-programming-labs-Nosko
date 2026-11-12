@@ -1,0 +1,77 @@
+{
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "trigger-4",
+      "name": "When clicking 'Test workflow'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "v-topic",
+              "name": "topic",
+              "value": "lab4/nosko/basic",
+              "type": "string"
+            },
+            {
+              "id": "v-time",
+              "name": "timestamp",
+              "value": "={{ $now }}",
+              "type": "string"
+            },
+            {
+              "id": "v-payload",
+              "name": "payload",
+              "value": "данные для 4 задания",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "id": "set-4",
+      "name": "Set",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [420, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const fullMsg = $input.first().json;\nconsole.log('Полное сообщение:', fullMsg);\nreturn [{ json: fullMsg }];"
+      },
+      "id": "code-4",
+      "name": "Code",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [640, 300]
+    }
+  ],
+  "connections": {
+    "When clicking 'Test workflow'": {
+      "main": [
+        [
+          {
+            "node": "Set",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
