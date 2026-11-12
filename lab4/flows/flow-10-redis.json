@@ -1,0 +1,59 @@
+{
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "trigger-10",
+      "name": "When clicking 'Test workflow'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "key": "nosko"
+      },
+      "id": "redis-del",
+      "name": "Redis Delete",
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [420, 300]
+    },
+    {
+      "parameters": {
+        "operation": "exists",
+        "key": "nosko",
+        "propertyName": "isExists"
+      },
+      "id": "redis-exists",
+      "name": "Redis Exists",
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [640, 300]
+    }
+  ],
+  "connections": {
+    "When clicking 'Test workflow'": {
+      "main": [
+        [
+          {
+            "node": "Redis Delete",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis Delete": {
+      "main": [
+        [
+          {
+            "node": "Redis Exists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
