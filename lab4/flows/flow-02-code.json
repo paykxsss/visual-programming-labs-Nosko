@@ -1,0 +1,54 @@
+{
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "trigger-2",
+      "name": "When clicking 'Test workflow'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [200, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "let payload = \"Студент\";\nconst group = \"AI-241\";\nlet array = [1, 2, 3];\nlet sum = 0;\n\nfor (let i = 0; i < array.length; i++) {\n  sum += array[i];\n}\n\nif (sum > 5) {\n  payload = `Сумма ${sum} больше 5. Группа ${group}`;\n} else {\n  payload = `Сумма ${sum} маленькая`;\n}\n\nreturn [{ json: { payload: payload } }];"
+      },
+      "id": "code-2",
+      "name": "Code",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [420, 300]
+    },
+    {
+      "parameters": {},
+      "id": "noop-2",
+      "name": "NoOp",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [640, 300]
+    }
+  ],
+  "connections": {
+    "When clicking 'Test workflow'": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "NoOp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
